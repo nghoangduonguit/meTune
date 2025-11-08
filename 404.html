@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        // GitHub Pages 404 redirect trick
+        // Store the path and redirect to index.html with the path
+        sessionStorage.redirect = location.pathname;
+        location.replace(
+            location.pathname.split('/').slice(0, -1).join('/') + '/index.html'
+        );
+    </script>
+</head>
+<body>
+    Đang chuyển hướng...
+</body>
+</html>

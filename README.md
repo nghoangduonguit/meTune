@@ -50,7 +50,7 @@ This updates `sheets-config.json` with your latest folder structure.
 - 📁 Lists all folders from the sheets directory
 - 🔍 Search/filter folders in real-time (including first-letter shortcuts)
 - 🖼️ View images in a slider with fullscreen mode
-- 🔗 **URL routing** - Each folder has its own URL (e.g., `#/co-mot-tinh-yeu`)
+- 🔗 **URL routing** - Each sheet has its own URL (e.g., `sheet.html?slug=co-mot-tinh-yeu`)
 - 🔄 **Page reload support** - Stay on the same folder after refresh
 - ⌨️ Keyboard navigation (Arrow keys, F for fullscreen, Escape)
 - 📱 Responsive design
@@ -86,18 +86,19 @@ This updates `sheets-config.json` with your latest folder structure.
 
 3. Open `index.html` in your browser!
 
-## URL Routing
+## URL Structure
 
-Each folder automatically gets its own URL based on its slug:
+Simple and clean URL structure:
 
-- Home: `domain.com/#/`
-- Folder: `domain.com/#/co-mot-tinh-yeu`
-- Folder: `domain.com/#/tinh-yeu-thien-chua`
+- Home: `https://nghoangduonguit.github.io/meTune/`
+- Sheet: `https://nghoangduonguit.github.io/meTune/sheet.html?slug=co-mot-tinh-yeu`
+- Sheet: `https://nghoangduonguit.github.io/meTune/sheet.html?slug=tinh-yeu-thien-chua`
 
 Benefits:
-- ✅ Shareable links to specific folders
-- ✅ Browser back/forward buttons work
-- ✅ Page reload keeps you on the same folder
+- ✅ Simple URL parameters
+- ✅ Shareable links to specific sheets
+- ✅ Works on any static server (no special configuration needed)
+- ✅ No 404 handling required
 - ✅ Bookmarkable URLs
 
 Slugs are automatically generated from folder names:

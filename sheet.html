@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản Nhạc</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Quản Lý Bản Nhạc</h1>
+        </header>
+
+        <main>
+            <!-- Image Slider Section -->
+            <section class="slider-section" id="sliderSection">
+                <div class="slider-header">
+                    <a href="index.html" class="back-btn">← Quay lại</a>
+                    <h2 id="folderTitle"></h2>
+                    <button class="fullscreen-btn" id="fullscreenBtn">⛶ Toàn màn hình</button>
+                </div>
+                <div class="slider-container">
+                    <button class="slider-btn prev" id="prevBtn">‹</button>
+                    <div class="slider-content">
+                        <img id="sliderImage" src="" alt="Bản nhạc">
+                        <div class="image-counter" id="imageCounter"></div>
+                    </div>
+                    <button class="slider-btn next" id="nextBtn">›</button>
+                </div>
+                <div class="thumbnail-list" id="thumbnailList">
+                    <!-- Thumbnails will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/js/sheet.js"></script>
+</body>
+</html>

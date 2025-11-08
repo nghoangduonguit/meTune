@@ -19,6 +19,7 @@ const imageCounter = document.getElementById('imageCounter');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const thumbnailList = document.getElementById('thumbnailList');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 
 // Initialize
 async function init() {
@@ -145,6 +146,11 @@ function showSlider() {
 
 // Hide slider and show folders
 function hideSlider() {
+    // Exit fullscreen if active
+    if (sliderSection.classList.contains('fullscreen')) {
+        toggleFullscreen();
+    }
+    
     sliderSection.classList.add('hidden');
     folderSection.classList.remove('hidden');
     currentFolder = null;
@@ -217,22 +223,80 @@ function nextImage() {
     }
 }
 
+// Toggle fullscreen mode
+function toggleFullscreen() {
+    sliderSection.classList.toggle('fullscreen');
+    
+    if (sliderSection.classList.contains('fullscreen')) {
+        fullscreenBtn.textContent = '✕ Exit Fullscreen';
+        // Try to enter browser fullscreen API
+        if (sliderSection.requestFullscreen) {
+            sliderSection.requestFullscreen().catch(err => {
+                console.log('Fullscreen API not available:', err);
+            });
+        } else if (sliderSection.webkitRequestFullscreen) {
+            sliderSection.webkitRequestFullscreen();
+        } else if (sliderSection.mozRequestFullScreen) {
+            sliderSection.mozRequestFullScreen();
+        } else if (sliderSection.msRequestFullscreen) {
+            sliderSection.msRequestFullscreen();
+        }
+    } else {
+        fullscreenBtn.textContent = '⛶ Fullscreen';
+        // Exit browser fullscreen
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else if (document.webkitFullscreenElement) {
+            document.webkitExitFullscreen();
+        } else if (document.mozFullScreenElement) {
+            document.mozCancelFullScreen();
+        } else if (document.msFullscreenElement) {
+            document.msExitFullscreen();
+        }
+    }
+}
+
+// Handle fullscreen change events
+function handleFullscreenChange() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+        !document.mozFullScreenElement && !document.msFullscreenElement) {
+        sliderSection.classList.remove('fullscreen');
+        fullscreenBtn.textContent = '⛶ Fullscreen';
+    }
+}
+
 // Setup event listeners
 function setupEventListeners() {
     searchInput.addEventListener('input', searchFolders);
     backBtn.addEventListener('click', hideSlider);
     prevBtn.addEventListener('click', previousImage);
     nextBtn.addEventListener('click', nextImage);
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Listen for fullscreen change events
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (!sliderSection.classList.contains('hidden')) {
             if (e.key === 'ArrowLeft') {
+                e.preventDefault();
                 previousImage();
             } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
                 nextImage();
             } else if (e.key === 'Escape') {
-                hideSlider();
+                if (sliderSection.classList.contains('fullscreen')) {
+                    toggleFullscreen();
+                } else {
+                    hideSlider();
+                }
+            } else if (e.key === 'f' || e.key === 'F') {
+                e.preventDefault();
+                toggleFullscreen();
             }
         }
     });

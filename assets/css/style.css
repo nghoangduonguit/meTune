@@ -105,7 +105,7 @@ header h1 {
     margin-bottom: 30px;
 }
 
-.back-btn {
+.back-btn, .fullscreen-btn {
     padding: 10px 20px;
     background: #3498db;
     color: white;
@@ -116,8 +116,12 @@ header h1 {
     transition: background 0.3s;
 }
 
-.back-btn:hover {
+.back-btn:hover, .fullscreen-btn:hover {
     background: #2980b9;
+}
+
+.fullscreen-btn {
+    margin-left: auto;
 }
 
 .slider-header h2 {
@@ -229,6 +233,79 @@ header h1 {
     display: none !important;
 }
 
+/* Fullscreen Mode */
+.slider-section.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background: #000;
+    border-radius: 0;
+    padding: 20px;
+    max-width: none;
+}
+
+.slider-section.fullscreen .slider-header {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.slider-section.fullscreen .slider-header h2 {
+    color: white;
+}
+
+.slider-section.fullscreen .slider-container {
+    height: calc(100vh - 200px);
+}
+
+.slider-section.fullscreen .slider-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slider-section.fullscreen .slider-content img {
+    max-width: 100%;
+    max-height: calc(100vh - 250px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.slider-section.fullscreen .image-counter {
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.slider-section.fullscreen .slider-btn {
+    background: rgba(52, 152, 219, 0.9);
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+}
+
+.slider-section.fullscreen .slider-btn:hover {
+    background: rgba(41, 128, 185, 0.9);
+}
+
+.slider-section.fullscreen .slider-btn:disabled {
+    background: rgba(189, 195, 199, 0.5);
+}
+
+.slider-section.fullscreen .thumbnail-list {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     header h1 {
@@ -243,5 +320,11 @@ header h1 {
         width: 40px;
         height: 40px;
         font-size: 24px;
+    }
+    
+    .slider-section.fullscreen .slider-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
     }
 }

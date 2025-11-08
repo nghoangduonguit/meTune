@@ -23,6 +23,19 @@ function naturalSort(a, b) {
     return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
 }
 
+function createSlug(text) {
+    return text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove accents
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'd')
+        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+        .trim()
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-'); // Replace multiple hyphens with single
+}
+
 function scanSheetsDirectory() {
     const folders = [];
 
@@ -64,6 +77,8 @@ function scanSheetsDirectory() {
 
             folders.push({
                 name: item,
+                slug: createSlug(item),
+                title: item,
                 images: images
             });
         });

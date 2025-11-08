@@ -6,6 +6,7 @@ let currentFolder = null;
 let currentImages = [];
 let currentImageIndex = 0;
 let allFolders = [];
+let foldersData = [];
 
 // DOM Elements
 const folderSection = document.getElementById('folderSection');
@@ -25,6 +26,7 @@ const fullscreenBtn = document.getElementById('fullscreenBtn');
 async function init() {
     await loadFolders();
     setupEventListeners();
+    handleRoute(); // Check URL on load
 }
 
 // Load folders from config file
@@ -34,6 +36,7 @@ async function loadFolders() {
         const data = await response.json();
         
         if (data && data.folders) {
+            foldersData = data.folders;
             allFolders = data.folders.map(f => f.name);
             displayFolders(allFolders);
         } else {
@@ -56,10 +59,17 @@ function displayFolders(folders) {
     }
 
     folders.forEach(folder => {
+        const folderData = foldersData.find(f => f.name === folder);
         const folderItem = document.createElement('div');
         folderItem.className = 'folder-item';
         folderItem.innerHTML = `<span>${folder}</span>`;
-        folderItem.onclick = () => openFolder(folder);
+        folderItem.onclick = () => {
+            if (folderData) {
+                openFolderBySlug(folderData.slug);
+            } else {
+                openFolder(folder);
+            }
+        };
         folderList.appendChild(folderItem);
     });
 }
@@ -101,37 +111,48 @@ function searchFolders() {
     displayFolders(filteredFolders);
 }
 
+// Open folder by slug and update URL
+function openFolderBySlug(slug) {
+    // Update URL without page reload
+    window.location.hash = `#/${slug}`;
+    openFolderBySlugDirect(slug);
+}
+
+// Open folder by slug (direct, no URL update)
+function openFolderBySlugDirect(slug) {
+    const folder = foldersData.find(f => f.slug === slug);
+    
+    if (folder) {
+        openFolder(folder.name, folder);
+    } else {
+        alert(`Không tìm thấy thư mục: ${slug}`);
+        window.location.hash = '#/';
+    }
+}
+
 // Open folder and load images
-async function openFolder(folderName) {
+function openFolder(folderName, folderData = null) {
     currentFolder = folderName;
     currentImages = [];
     currentImageIndex = 0;
 
-    try {
-        const response = await fetch('sheets-config.json');
-        const data = await response.json();
+    if (!folderData) {
+        folderData = foldersData.find(f => f.name === folderName);
+    }
+    
+    if (folderData) {
+        currentImages = folderData.images.map(img => `${SHEETS_FOLDER}/${folderName}/${img}`);
         
-        if (data && data.folders) {
-            const folder = data.folders.find(f => f.name === folderName);
-            
-            if (folder) {
-                currentImages = folder.images.map(img => `${SHEETS_FOLDER}/${folderName}/${img}`);
-                
-                if (currentImages.length === 0) {
-                    alert(`Không tìm thấy hình ảnh trong ${folderName}.`);
-                    return;
-                }
-                
-                showSlider();
-            } else {
-                alert(`Không tìm thấy thư mục: ${folderName}`);
-            }
-        } else {
-            alert('Lỗi: Định dạng file cấu hình không hợp lệ');
+        if (currentImages.length === 0) {
+            alert(`Không tìm thấy hình ảnh trong ${folderName}.`);
+            window.location.hash = '#/';
+            return;
         }
-    } catch (error) {
-        console.error('Error loading images:', error);
-        alert('Lỗi khi tải hình ảnh từ thư mục');
+        
+        showSlider();
+    } else {
+        alert(`Không tìm thấy thư mục: ${folderName}`);
+        window.location.hash = '#/';
     }
 }
 
@@ -150,6 +171,9 @@ function hideSlider() {
     if (sliderSection.classList.contains('fullscreen')) {
         toggleFullscreen();
     }
+    
+    // Update URL to home
+    window.location.hash = '#/';
     
     sliderSection.classList.add('hidden');
     folderSection.classList.remove('hidden');
@@ -274,6 +298,25 @@ function handleFullscreenChange() {
     }
 }
 
+// Handle URL routing
+function handleRoute() {
+    const hash = window.location.hash;
+    
+    if (!hash || hash === '#/' || hash === '#') {
+        // Home page - show folders
+        if (!sliderSection.classList.contains('hidden')) {
+            sliderSection.classList.add('hidden');
+            folderSection.classList.remove('hidden');
+        }
+    } else {
+        // Extract slug from hash (e.g., #/co-mot-tinh-yeu)
+        const slug = hash.replace('#/', '');
+        if (slug && foldersData.length > 0) {
+            openFolderBySlugDirect(slug);
+        }
+    }
+}
+
 // Setup event listeners
 function setupEventListeners() {
     searchInput.addEventListener('input', searchFolders);
@@ -281,6 +324,9 @@ function setupEventListeners() {
     prevBtn.addEventListener('click', previousImage);
     nextBtn.addEventListener('click', nextImage);
     fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Listen for hash changes (back/forward navigation)
+    window.addEventListener('hashchange', handleRoute);
 
     // Listen for fullscreen change events
     document.addEventListener('fullscreenchange', handleFullscreenChange);

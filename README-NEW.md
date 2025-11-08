@@ -1,6 +1,6 @@
 # meTune - Sheet Music Viewer
 
-A simple static site for browsing folders and viewing sheet music images. No PHP server required!
+A simple static site for browsing folders and viewing sheet music images with URL routing support. No PHP server required!
 
 ## Structure
 
@@ -33,22 +33,8 @@ meTune/
    This scans your sheets directory and creates `sheets-config.json`
 
 3. **Open the tool**:
-   - Open `index.html` directly in your browser, or
-   - Use any simple HTTP server:
-     ```bash
-     # Using Python
-     python3 -m http.server 8000
-     
-     # Using Node.js (if you have http-server installed)
-     npx http-server
-     
-     # Using VS Code Live Server extension
-     # Right-click index.html > "Open with Live Server"
-     ```
-
-4. **Visit the site**:
-   - If using a server: `http://localhost:8000`
-   - Or just double-click `index.html` to open in browser
+   - Just open `index.html` in your browser
+   - Or use VS Code Live Server extension (right-click index.html > "Open with Live Server")
 
 ## Important
 
@@ -63,9 +49,12 @@ This updates `sheets-config.json` with your latest folder structure.
 
 - 📁 Lists all folders from the sheets directory
 - 🔍 Search/filter folders in real-time (including first-letter shortcuts)
-- 🖼️ View images in a slider
-- ⌨️ Keyboard navigation (Arrow keys, Escape)
+- 🖼️ View images in a slider with fullscreen mode
+- 🔗 **URL routing** - Each folder has its own URL (e.g., `#/co-mot-tinh-yeu`)
+- 🔄 **Page reload support** - Stay on the same folder after refresh
+- ⌨️ Keyboard navigation (Arrow keys, F for fullscreen, Escape)
 - 📱 Responsive design
+- 🇻🇳 Vietnamese interface
 - ⚡ No backend server required - works as a static site
 
 ## Supported Image Formats
@@ -97,10 +86,28 @@ This updates `sheets-config.json` with your latest folder structure.
 
 3. Open `index.html` in your browser!
 
+## URL Routing
+
+Each folder automatically gets its own URL based on its slug:
+
+- Home: `domain.com/#/`
+- Folder: `domain.com/#/co-mot-tinh-yeu`
+- Folder: `domain.com/#/tinh-yeu-thien-chua`
+
+Benefits:
+- ✅ Shareable links to specific folders
+- ✅ Browser back/forward buttons work
+- ✅ Page reload keeps you on the same folder
+- ✅ Bookmarkable URLs
+
+Slugs are automatically generated from folder names:
+- "Co Mot Tinh Yeu" → `co-mot-tinh-yeu`
+- "Tình Yêu Thiên Chúa" → `tinh-yeu-thien-chua`
+
 ## Migration from PHP
 
 The old `api.php` file is no longer needed. The app now uses:
-- `sheets-config.json` - Contains folder and file listings
+- `sheets-config.json` - Contains folder listings with slugs, titles, and images
 - `generate-config.js` - Script to generate the config file
 
 This means you can host the site anywhere (GitHub Pages, Netlify, etc.) without needing PHP!

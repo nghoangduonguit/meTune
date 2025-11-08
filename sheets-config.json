@@ -2,6 +2,8 @@
   "folders": [
     {
       "name": "Co Mot Tinh Yeu",
+      "slug": "co-mot-tinh-yeu",
+      "title": "Co Mot Tinh Yeu",
       "images": [
         "S1LW44_1032021_IMG_00.jpeg",
         "S1LW44_1032021_IMG_01.jpeg",
@@ -13,6 +15,8 @@
     },
     {
       "name": "Tinh Yeu Thien Chua",
+      "slug": "tinh-yeu-thien-chua",
+      "title": "Tinh Yeu Thien Chua",
       "images": []
     }
   ]

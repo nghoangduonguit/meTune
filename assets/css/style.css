@@ -259,14 +259,20 @@ header h1 {
     z-index: 9999;
     background: #000;
     border-radius: 0;
-    padding: 20px;
+    padding: 0;
     max-width: none;
 }
 
 .slider-section.fullscreen .slider-header {
     background: rgba(0, 0, 0, 0.8);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 0;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.slider-section.fullscreen .slider-header:hover {
+    opacity: 1;
 }
 
 .slider-section.fullscreen .slider-header h2 {
@@ -290,7 +296,9 @@ header h1 {
 }
 
 .slider-section.fullscreen .slider-container {
-    height: calc(100vh - 200px);
+    height: 100vh;
+    margin: 0;
+    gap: 0;
 }
 
 .slider-section.fullscreen .slider-content {
@@ -298,44 +306,66 @@ header h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .slider-section.fullscreen .slider-content img {
-    max-width: 100%;
-    max-height: calc(100vh - 250px);
+    max-width: 100vw;
+    max-height: 100vh;
     width: auto;
     height: auto;
     object-fit: contain;
 }
 
 .slider-section.fullscreen .image-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     color: white;
     background: rgba(0, 0, 0, 0.8);
     padding: 10px 20px;
     border-radius: 8px;
     display: inline-block;
-    margin-top: 15px;
+    margin-top: 0;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.slider-section.fullscreen .image-counter:hover {
+    opacity: 1;
 }
 
 .slider-section.fullscreen .slider-btn {
-    background: rgba(52, 152, 219, 0.9);
+    position: absolute;
+    background: rgba(52, 152, 219, 0.7);
     width: 60px;
     height: 60px;
     font-size: 36px;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+}
+
+.slider-section.fullscreen .slider-btn.prev {
+    left: 20px;
+}
+
+.slider-section.fullscreen .slider-btn.next {
+    right: 20px;
 }
 
 .slider-section.fullscreen .slider-btn:hover {
     background: rgba(41, 128, 185, 0.9);
+    opacity: 1;
 }
 
 .slider-section.fullscreen .slider-btn:disabled {
     background: rgba(189, 195, 199, 0.5);
+    opacity: 0.2;
 }
 
 .slider-section.fullscreen .thumbnail-list {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 15px;
-    border-radius: 8px;
+    display: none;
 }
 
 /* Responsive */

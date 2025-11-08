@@ -105,7 +105,7 @@ header h1 {
     margin-bottom: 30px;
 }
 
-.back-btn, .fullscreen-btn {
+.back-btn {
     padding: 10px 20px;
     background: #3498db;
     color: white;
@@ -113,15 +113,31 @@ header h1 {
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    font-weight: 500;
 }
 
-.back-btn:hover, .fullscreen-btn:hover {
+.back-btn:hover {
     background: #2980b9;
+    transform: translateX(-2px);
 }
 
 .fullscreen-btn {
+    padding: 10px 20px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
     margin-left: auto;
+    font-weight: 500;
+}
+
+.fullscreen-btn:hover {
+    background: #229954;
+    transform: scale(1.05);
 }
 
 .slider-header h2 {
@@ -255,6 +271,22 @@ header h1 {
 
 .slider-section.fullscreen .slider-header h2 {
     color: white;
+}
+
+.slider-section.fullscreen .back-btn {
+    background: rgba(52, 152, 219, 0.9);
+}
+
+.slider-section.fullscreen .back-btn:hover {
+    background: rgba(41, 128, 185, 1);
+}
+
+.slider-section.fullscreen .fullscreen-btn {
+    background: rgba(231, 76, 60, 0.9);
+}
+
+.slider-section.fullscreen .fullscreen-btn:hover {
+    background: rgba(192, 57, 43, 1);
 }
 
 .slider-section.fullscreen .slider-container {

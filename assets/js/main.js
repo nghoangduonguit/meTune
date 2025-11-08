@@ -38,11 +38,11 @@ async function loadFolders() {
             displayFolders(allFolders);
         } else {
             console.error('Error: Invalid config format');
-            displayMessage('Error: Invalid configuration file format');
+            displayMessage('Lỗi: Định dạng file cấu hình không hợp lệ');
         }
     } catch (error) {
         console.error('Error loading folders:', error);
-        displayMessage('Error loading configuration. Please run generate-config.js to create sheets-config.json');
+        displayMessage('Lỗi tải cấu hình. Vui lòng chạy lệnh: node generate-config.js');
     }
 }
 
@@ -51,7 +51,7 @@ function displayFolders(folders) {
     folderList.innerHTML = '';
     
     if (folders.length === 0) {
-        folderList.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">No folders found. Please add folders to the "sheets" directory.</p>';
+        folderList.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">Không tìm thấy thư mục nào. Vui lòng thêm thư mục vào "sheets".</p>';
         return;
     }
 
@@ -118,20 +118,20 @@ async function openFolder(folderName) {
                 currentImages = folder.images.map(img => `${SHEETS_FOLDER}/${folderName}/${img}`);
                 
                 if (currentImages.length === 0) {
-                    alert(`No images found in ${folderName}.`);
+                    alert(`Không tìm thấy hình ảnh trong ${folderName}.`);
                     return;
                 }
                 
                 showSlider();
             } else {
-                alert(`Folder not found: ${folderName}`);
+                alert(`Không tìm thấy thư mục: ${folderName}`);
             }
         } else {
-            alert('Error: Invalid configuration file format');
+            alert('Lỗi: Định dạng file cấu hình không hợp lệ');
         }
     } catch (error) {
         console.error('Error loading images:', error);
-        alert('Error loading images from folder');
+        alert('Lỗi khi tải hình ảnh từ thư mục');
     }
 }
 
@@ -163,7 +163,7 @@ function displayCurrentImage() {
     if (currentImages.length === 0) return;
 
     sliderImage.src = currentImages[currentImageIndex];
-    sliderImage.alt = `Image ${currentImageIndex + 1}`;
+    sliderImage.alt = `Trang ${currentImageIndex + 1}`;
     imageCounter.textContent = `${currentImageIndex + 1} / ${currentImages.length}`;
 
     // Update button states
@@ -182,7 +182,7 @@ function createThumbnails() {
         const thumbnail = document.createElement('img');
         thumbnail.src = imageSrc;
         thumbnail.className = 'thumbnail';
-        thumbnail.alt = `Thumbnail ${index + 1}`;
+        thumbnail.alt = `Trang ${index + 1}`;
         thumbnail.onclick = () => goToImage(index);
         
         if (index === currentImageIndex) {
@@ -225,32 +225,41 @@ function nextImage() {
 
 // Toggle fullscreen mode
 function toggleFullscreen() {
-    sliderSection.classList.toggle('fullscreen');
+    const isFullscreen = sliderSection.classList.contains('fullscreen');
     
-    if (sliderSection.classList.contains('fullscreen')) {
-        fullscreenBtn.textContent = '✕ Exit Fullscreen';
+    if (!isFullscreen) {
+        // Enter fullscreen
+        sliderSection.classList.add('fullscreen');
+        fullscreenBtn.textContent = '✕ Thoát toàn màn hình';
+        
         // Try to enter browser fullscreen API
-        if (sliderSection.requestFullscreen) {
-            sliderSection.requestFullscreen().catch(err => {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
                 console.log('Fullscreen API not available:', err);
             });
-        } else if (sliderSection.webkitRequestFullscreen) {
-            sliderSection.webkitRequestFullscreen();
-        } else if (sliderSection.mozRequestFullScreen) {
-            sliderSection.mozRequestFullScreen();
-        } else if (sliderSection.msRequestFullscreen) {
-            sliderSection.msRequestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
         }
     } else {
-        fullscreenBtn.textContent = '⛶ Fullscreen';
+        // Exit fullscreen
+        sliderSection.classList.remove('fullscreen');
+        fullscreenBtn.textContent = '⛶ Toàn màn hình';
+        
         // Exit browser fullscreen
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        } else if (document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().catch(err => {
+                console.log('Exit fullscreen error:', err);
+            });
+        } else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
-        } else if (document.mozFullScreenElement) {
+        } else if (document.mozCancelFullScreen) {
             document.mozCancelFullScreen();
-        } else if (document.msFullscreenElement) {
+        } else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
     }
@@ -261,7 +270,7 @@ function handleFullscreenChange() {
     if (!document.fullscreenElement && !document.webkitFullscreenElement && 
         !document.mozFullScreenElement && !document.msFullscreenElement) {
         sliderSection.classList.remove('fullscreen');
-        fullscreenBtn.textContent = '⛶ Fullscreen';
+        fullscreenBtn.textContent = '⛶ Toàn màn hình';
     }
 }
 

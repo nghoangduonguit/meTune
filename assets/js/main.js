@@ -26,22 +26,22 @@ async function init() {
     setupEventListeners();
 }
 
-// Load folders from sheets directory
+// Load folders from config file
 async function loadFolders() {
     try {
-        const response = await fetch('api.php?action=getFolders');
+        const response = await fetch('sheets-config.json');
         const data = await response.json();
         
-        if (data.success) {
-            allFolders = data.folders;
+        if (data && data.folders) {
+            allFolders = data.folders.map(f => f.name);
             displayFolders(allFolders);
         } else {
-            console.error('Error loading folders:', data.error);
-            displayMessage('Error loading folders: ' + (data.error || 'Unknown error'));
+            console.error('Error: Invalid config format');
+            displayMessage('Error: Invalid configuration file format');
         }
     } catch (error) {
         console.error('Error loading folders:', error);
-        displayMessage('Error connecting to server. Make sure PHP is running.');
+        displayMessage('Error loading configuration. Please run generate-config.js to create sheets-config.json');
     }
 }
 
@@ -107,21 +107,26 @@ async function openFolder(folderName) {
     currentImageIndex = 0;
 
     try {
-        const response = await fetch(`api.php?action=getImages&folder=${encodeURIComponent(folderName)}`);
+        const response = await fetch('sheets-config.json');
         const data = await response.json();
         
-        if (data.success) {
-            currentImages = data.images.map(img => `${SHEETS_FOLDER}/${folderName}/${img}`);
+        if (data && data.folders) {
+            const folder = data.folders.find(f => f.name === folderName);
             
-            if (currentImages.length === 0) {
-                alert(`No images found in ${folderName}.`);
-                return;
+            if (folder) {
+                currentImages = folder.images.map(img => `${SHEETS_FOLDER}/${folderName}/${img}`);
+                
+                if (currentImages.length === 0) {
+                    alert(`No images found in ${folderName}.`);
+                    return;
+                }
+                
+                showSlider();
+            } else {
+                alert(`Folder not found: ${folderName}`);
             }
-            
-            showSlider();
         } else {
-            console.error('Error loading images:', data.error);
-            alert('Error loading images: ' + (data.error || 'Unknown error'));
+            alert('Error: Invalid configuration file format');
         }
     } catch (error) {
         console.error('Error loading images:', error);
